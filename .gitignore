@@ -1,0 +1,19 @@
+venv/
+__pycache__
+# Python cache files
+_pycache_/
+*.py[cod]
+*$py.class
+backend/**/_pycache_/
+backend/creditDispute/_pycache_/
+
+
+# Environment variables
+.env
+*.env
+.env.local
+.env.development
+.env.production
+
+# Keep example files
+!.env.example
