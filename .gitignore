@@ -1,5 +1,6 @@
-**/__pycache__/
-*.pyc
-*.pyo
-*.pyd
-.Python
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+backend/**/__pycache__/
+backend/creditDispute/__pycache__/
