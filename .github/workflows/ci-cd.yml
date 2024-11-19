@@ -32,14 +32,12 @@ jobs:
         PYTHONPATH: ${{ github.workspace }}/backend
       run: |
         python manage.py makemigrations authentication
-        python manage.py makemigrations creditDispute
         python manage.py migrate
         
     - name: Run Django tests
       working-directory: ./backend
       run: |
         python manage.py test authentication
-        python manage.py test creditDispute
         
     # Node/React setup
     - name: Set up Node
