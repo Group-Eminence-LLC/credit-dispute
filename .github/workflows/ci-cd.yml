@@ -23,9 +23,9 @@ jobs:
       working-directory: ./backend
       run: |
         python -m pip install --upgrade pip
-        python -m pip install django
+        python -m pip install django  # Explicitly install Django first
         pip install -r requirements.txt
-        
+          
     - name: Run Django migrations
       working-directory: ./backend
       env:
