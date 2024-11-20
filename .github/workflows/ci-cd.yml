@@ -2,13 +2,18 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [ main, develop ] 
   pull_request:
     branches: [ main, develop ]
 
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+    
+    # Add permission for PR comments if you want GitHub Actions to comment on PRs
+    permissions:
+      pull-requests: write
+      contents: read
     
     steps:
     - uses: actions/checkout@v2
@@ -23,7 +28,7 @@ jobs:
       working-directory: ./backend
       run: |
         python -m pip install --upgrade pip
-        python -m pip install django  # Explicitly install Django first
+        python -m pip install django
         pip install -r requirements.txt
           
     - name: Run Django migrations
