@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_simplejwt',
-    'apps.authentication',
+    'authentication',
     'corsheaders',
 ]
 
@@ -161,4 +161,4 @@ CORS_ALLOWED_ORIGINS = [
 ]
 #CORS_ALLOW_ALL_ORIGINS = True  # Alternatively, you can allow all origins (not recommended for production)
 #RATELIMIT_VIEW = 'django_ratelimit.views.error'
-RATELIMIT_VIEW = 'apps.authentication.views.rate_limit_exceeded_view'
+RATELIMIT_VIEW = 'authentication.views.rate_limit_exceeded_view'

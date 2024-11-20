@@ -9,7 +9,7 @@ data = {
     "password": "securepassword"
 }
 
-for i in range(6):
+for i in range(8):
     response = requests.post(url, json=data)
     print(f"Request {i+1}: Status Code {response.status_code}, Response {response.json()}")
     time.sleep(1)  # Sleep for 1 second between requests
