@@ -39,6 +39,11 @@ jobs:
           echo "Directory contents of site-packages:"
           ls -la /opt/hostedtoolcache/Python/3.10.12/x64/lib/python3.10/site-packages/
       
+
+    - name: Setup Django Cache
+      working-directory: ./backend
+      run: |
+        python manage.py createcachetable
     - name: Run Django migrations
       working-directory: ./backend
       env:
