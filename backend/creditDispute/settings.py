@@ -176,8 +176,11 @@ RATELIMIT_VIEW = 'authentication.views.rate_limit_exceeded_view'
 if IS_GITHUB_ACTIONS:
     CACHES = {
         'default': {
-            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',  # Changed from memory.MemoryCache
-            'LOCATION': 'unique-snowflake',
+            'BACKEND': 'django_redis.cache.RedisCache',
+            'LOCATION': 'redis://127.0.0.1:6379/1',
+            'OPTIONS': {
+                'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+            }
         }
     }
 else:

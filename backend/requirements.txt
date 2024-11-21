@@ -8,3 +8,4 @@ nodeenv==1.9.1
 PyJWT==2.10.0
 sqlparse==0.5.2
 typing_extensions==4.12.2
+django-redis==5.4.0
