@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_simplejwt',
-    'django_ratelimit',
+    'django_ratelimit.apps.RatelimitConfig',
     'authentication',
     'corsheaders',
 ]
