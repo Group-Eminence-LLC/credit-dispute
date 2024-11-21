@@ -30,8 +30,9 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install django
         pip install setuptools
-        pip install django-ratelimit
+        pip install django-ratelimit --no-cache-dir
         pip install -r requirements.txt
+        pip freeze
           
     - name: Run Django migrations
       working-directory: ./backend
