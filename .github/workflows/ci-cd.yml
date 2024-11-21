@@ -22,22 +22,23 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: '3.x'
+        python-version: '3.8'
     
     - name: Install Python dependencies
       working-directory: ./backend
       run: |
         python -m pip install --upgrade pip
-        python -m pip install django
-        pip install setuptools
-        pip install django-ratelimit --no-cache-dir
+        pip install setuptools wheel
         pip install -r requirements.txt
+        pip install django-ratelimit==2.0.0 --no-cache-dir
+        echo "Installed packages:"
         pip freeze
           
     - name: Run Django migrations
       working-directory: ./backend
       env:
         PYTHONPATH: ${{ github.workspace }}/backend
+        DJANGO_SETTINGS_MODULE: creditDispute.settings
       run: |
         python manage.py makemigrations authentication
         python manage.py migrate
