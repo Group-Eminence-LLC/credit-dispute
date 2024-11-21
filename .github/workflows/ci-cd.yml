@@ -46,11 +46,32 @@ jobs:
         DJANGO_SETTINGS_MODULE: creditDispute.settings
         DEBUG: "True"
       run: |
-        python -c "import sys; print('Python path:', sys.path)"
-        python -c "from django.conf import settings; print('Installed apps:', settings.INSTALLED_APPS)"
-        python manage.py check
-        python manage.py makemigrations authentication
+        echo "Current directory:"
+        pwd
+        echo "Directory contents:"
+        ls -la
+        echo "Running Django check with verbosity 2:"
+        python manage.py check -v 2
+        echo "Running migrations with verbosity 2:"
+        python manage.py makemigrations authentication -v 2
 
+
+    - name: Verify Django Settings
+      working-directory: ./backend
+      env:
+        PYTHONPATH: "${{ github.workspace }}/backend"
+        DJANGO_SETTINGS_MODULE: creditDispute.settings
+      run: |
+        python -c "
+        import os
+        import django
+        from django.conf import settings
+        print('Django version:', django.get_version())
+        print('Settings module:', os.environ.get('DJANGO_SETTINGS_MODULE'))
+        print('Debug mode:', settings.DEBUG)
+        print('Database:', settings.DATABASES)
+        print('Cache:', settings.CACHES)
+        "
 
 
     - name: Debug Python Environment
