@@ -11,10 +11,11 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
-
+import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+IS_GITHUB_ACTIONS = os.getenv('GITHUB_ACTIONS') == 'true'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -170,3 +171,19 @@ CORS_ALLOWED_ORIGINS = [
 #CORS_ALLOW_ALL_ORIGINS = True  # Alternatively, you can allow all origins (not recommended for production)
 #RATELIMIT_VIEW = 'django_ratelimit.views.error'
 RATELIMIT_VIEW = 'authentication.views.rate_limit_exceeded_view'
+
+# Cache configuration
+if IS_GITHUB_ACTIONS:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.memory.MemoryCache',
+            'LOCATION': 'unique-snowflake',
+        }
+    }
+else:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+            'LOCATION': 'my_cache_table',
+        }
+    }
