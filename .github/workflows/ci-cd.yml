@@ -10,7 +10,6 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
     
-    # Add permission for PR comments if you want GitHub Actions to comment on PRs
     permissions:
       pull-requests: write
       contents: read
@@ -22,7 +21,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: '3.8'
+        python-version: '3.10.12'  # Exact match with your local version
     
     - name: Install Python dependencies
       working-directory: ./backend
@@ -30,7 +29,6 @@ jobs:
         python -m pip install --upgrade pip
         pip install setuptools wheel
         pip install -r requirements.txt
-        pip install django-ratelimit==2.0.0 --no-cache-dir
         echo "Installed packages:"
         pip freeze
           
