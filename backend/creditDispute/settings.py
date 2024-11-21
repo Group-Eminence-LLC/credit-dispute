@@ -176,7 +176,7 @@ RATELIMIT_VIEW = 'authentication.views.rate_limit_exceeded_view'
 if IS_GITHUB_ACTIONS:
     CACHES = {
         'default': {
-            'BACKEND': 'django.core.cache.backends.memory.MemoryCache',
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',  # Changed from memory.MemoryCache
             'LOCATION': 'unique-snowflake',
         }
     }
