@@ -1,6 +1,5 @@
-import React from 'react';
+import {React,useState} from 'react';
 import { Grid2, Paper, Avatar, TextField } from '@mui/material';
-
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import InputAdornment from '@mui/material/InputAdornment';
 import LockIcon from '@mui/icons-material/Lock';
@@ -9,40 +8,82 @@ import Checkbox from '@mui/material/Checkbox';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Button from '@mui/material/Button';
-
+import { Box } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
+import { signUpUser, resetError } from '../../../slices/authSlice';
+import Alert from '@mui/material/Alert';
 
 const Signup = () => {
-    const paperStyle = {
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+  });
+  const [policyAccepted, setPolicyAccepted] = useState(false);
+
+  const dispatch = useDispatch();
+  const { loading, error } = useSelector((state) => state.auth);
+
+  // Event handlers
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleCheckboxChange = () => {
+    setPolicyAccepted(!policyAccepted);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!policyAccepted) {
+      alert('Please accept the privacy and policy to proceed.');
+      return;
+    }
+    dispatch(signUpUser(formData));
+  };
+const paperStyle = {
         padding: 20,
-        height: '75vh',
-        width: 280,
+        height: '90vh',
+        width: 320,
         margin: "20px auto", 
         borderRadius: "20px",
-        backgroundColor: "rgb(79, 238, 249)"
+        backgroundColor: "rgb(199,259,241)"
       };
+return (
+    <Box sx={{
+      alignItems:"center",
+      border: '1px solid #ccc', // Add a border to the box
+      padding: '20px',
+      borderRadius: '10px',
+      boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)', // Add a subtle shadow
 
-
-
-
-  return (
-    <div className='signup-section'>
-        <h1>Sign up here</h1>
+    }}>
+   
 {/* Signup Paper */}
 <Grid2 item>
+
             <Paper elevation={10} style={paperStyle}>
+            <h1>Sign up here</h1>
               <Grid2 align='center'>
-                {/*
-                <Avatar style={avatarStyle}>
-                  <LockOutlinedIcon />
-                </Avatar>
-                */}
                 <h3>SIGNUP</h3>
               </Grid2>
+              {error && (
+            <Alert severity="error" onClose={() => dispatch(resetError())}>
+              {error}
+            </Alert>
+          )}
+          <form onSubmit={handleSubmit}>
               <TextField
                 fullWidth
+                name='firstName'
                 label="First name"
                 placeholder="First name"
                 variant="outlined"
+                value={formData.firstName}
+                onChange={handleInputChange}
                 sx={{
                   '& .MuiOutlinedInput-root': {
                     borderRadius: '25px',
@@ -62,9 +103,12 @@ const Signup = () => {
               />
                <TextField
                 fullWidth
+                name='lastName'
                 label="Last name"
                 placeholder="Last name"
                 variant="outlined"
+                value={formData.lastName}
+                onChange={handleInputChange}
                 sx={{
                   '& .MuiOutlinedInput-root': {
                     borderRadius: '25px',
@@ -84,9 +128,12 @@ const Signup = () => {
               />
            <TextField
                 fullWidth
+                name='email'
                 label="Email"
                 placeholder="Email"
                 variant="outlined"
+                value={formData.email}
+                onChange={handleInputChange}
                 sx={{
                   '& .MuiOutlinedInput-root': {
                     borderRadius: '25px',
@@ -107,10 +154,14 @@ const Signup = () => {
     
               <TextField
                 fullWidth
+                name='password'
                 label="Password"
                 placeholder="Password"
                 type="password"
                 variant="outlined"
+                value={formData.password}
+                onChange={handleInputChange}
+                
                 sx={{
                   '& .MuiOutlinedInput-root': {
                     borderRadius: '25px',
@@ -130,10 +181,13 @@ const Signup = () => {
               />
                <TextField
                 fullWidth
+                name='confirmPassword'
                 label=" Confirm Password"
                 placeholder="Confirm Password"
                 type="password"
                 variant="outlined"
+                value={formData.confirmPassword}
+                onChange={handleInputChange}
                 sx={{
                   '& .MuiOutlinedInput-root': {
                     borderRadius: '25px',
@@ -150,13 +204,11 @@ const Signup = () => {
                       ),
                     },
                   }}
-    
-    
-              />
+            />
                <FormGroup>
           <FormControlLabel control=
-          {<Checkbox defaultChecked
-            
+          {<Checkbox checked={policyAccepted}
+            onChange={handleCheckboxChange}
           sx={{
               color: 'black', // Black border for the checkbox
               '&.Mui-checked': {
@@ -167,6 +219,8 @@ const Signup = () => {
     </FormGroup>
         <br/>
         <Button variant="contained"
+         type="submit"
+         disabled={loading}
          sx={{
         backgroundColor: 'black',
         color: 'white',
@@ -178,13 +232,11 @@ const Signup = () => {
           },
       }}
        >SIGNUP</Button>
-    </Paper>
-          </Grid2>
-
-
-      
-    </div>
-  )
+    </form>
+</Paper>
+    </Grid2>
+</Box>
+    )
 }
 
-export default Signup
+export default Signup;

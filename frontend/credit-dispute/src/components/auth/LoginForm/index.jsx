@@ -1,5 +1,4 @@
-import React from 'react'
-import { Grid2, Paper, Avatar, TextField } from '@mui/material';
+import {React,useState} from 'react'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -10,53 +9,46 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Button from '@mui/material/Button';
 import SigninwithgoogleButton from '../../../hooks/useAuth';
-const Landing= () => {
+import { useDispatch, useSelector } from 'react-redux';
+import { loginUser, resetError } from '../../../slices/authSlice';
+import { TextField,CircularProgress, Alert, Grid2, Paper } from '@mui/material';
+import { Link } from 'react-router-dom';
+const Login= () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const dispatch = useDispatch();
+  const { loading, error } = useSelector((state) => state.auth);
 
-    const paperStyle = {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatch(loginUser({ email, password }));
+  };
+ const paperStyle = {
         padding: 20,
-        height: '75vh',
-        width: 280,
-        margin: "40px 20px 40px 20px", // Adjusted for side-by-side positioning
+        height: '80vh',
+        width: 320,
+        margin: "20px auto", // Adjusted for side-by-side positioning
         borderRadius: "20px",
-        backgroundColor: "rgb(79, 238, 249)"
+        backgroundColor: "rgb(199,259,241)"
       };
-    
-      const avatarStyle = { backgroundColor: "black" };
-      const emergingPaperStyle = {
-        position: 'absolute',
-        top: '-1px', // Adjust to move it slightly above the other papers
-        left: '50%',
-        transform: 'translateX(-50%)', // Centers it horizontally
-        width: 300,
-        height: '80%',
-        backgroundColor: '#eeeded',
-        zIndex: -1, // Ensures it's behind the other papers
-        borderRadius: '25px',
-        boxShadow: '10px 10px 20px rgba(0, 0, 0, 0.1)', 
-        margin:'30px'
-        
-        // Optional for extra shadow effect
-    
-      };
-    
-      return (
+      
+return (
         <Grid2 container justifyContent="center" spacing={3}>
           {/* Login Paper */}
           <Grid2 item>
             <Paper elevation={10} style={paperStyle}>
               <Grid2 align='center'>
-                {/*
-                <Avatar style={avatarStyle}>
-                  <LockOutlinedIcon />
-                </Avatar>
-                */}
-                <h3>LOGIN</h3>
-              </Grid2>
+            <h3>LOGIN</h3>
+            </Grid2>
+            <form onSubmit={handleSubmit}>
               <TextField
                 fullWidth
                 label="Email"
                 placeholder="Email"
                 variant="outlined"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 sx={{
                   '& .MuiOutlinedInput-root': {
                     borderRadius: '25px',
@@ -74,20 +66,15 @@ const Landing= () => {
                     },
                   }}
                 />
-    
-    
-    
-    
-    
-    
-    
-              
               <TextField
                 fullWidth
                 label="Password"
                 placeholder="Enter password"
                 type="password"
                 variant="outlined"
+                value={password}
+                required
+                onChange={(e) => setPassword(e.target.value)}
                 sx={{
                   '& .MuiOutlinedInput-root': {
                     borderRadius: '25px',
@@ -107,19 +94,14 @@ const Landing= () => {
               <FormGroup>
           <FormControlLabel control=
           {<Checkbox defaultChecked
-            
             sx={{
               color: 'black', // Black border for the checkbox
               '&.Mui-checked': {
                 color: 'black', // Black tick and border when checked
               },
             }}
-    
-    
-    
            />} label="Remember me?" />
-          
-        </FormGroup>
+  </FormGroup>
         <Button href="#text-buttons"
            sx={{
             textTransform: 'lowercase', // Converts text to lowercase
@@ -132,14 +114,10 @@ const Landing= () => {
             },
           }}
         >
-        
-        
-        
-        
-        
         Forgot password</Button>
          <br/>
-        <Button variant="contained"
+        <Button variant="contained" type="submit" disabled={loading}
+        
          sx={{
         backgroundColor: 'black',
         color: 'white',
@@ -149,225 +127,33 @@ const Landing= () => {
         // optional spacing
         ':hover': {
           backgroundColor: 'darkgray',
-          
-          // optional hover effect
-        },
+          },
         mb:2,
       }}
-    
-    
-        >LOGIN</Button>  <br />
+    > {loading ? 'Logging In...' : 'Login'}</Button>
+    </form>
+      <br />
+ <Button component={Link}
+           to="/signup"
+           sx={{
+            textTransform:'lowercase',
+            fontSize: '0.875rem', // Optional: Adjusts font size
+            alignSelf: 'flex-end', // Aligns to the right
+            cursor: 'pointer', // Makes it look clickable
+            color: 'black', // Optional: Add color for emphasis
+            ':hover': {
+              textDecoration: 'underline', 
+            },
+            mb:2,
+          }}
+        >
+        Don't have an account? Sign up</Button>
 
-        
-
-        {/* Render Google Sign-in Button */}
+{/* Render Google Sign-in Button */}
         <SigninwithgoogleButton />
-
-       
-
-
-            </Paper>
+       </Paper>
           </Grid2>
-        {/* Emerging Paper */}
-        <Grid2 >
-            <Paper elevation={10} style={emergingPaperStyle} />
-            <Grid2 item style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start' }}>
-            <Avatar style={avatarStyle}>
-                  <LockOutlinedIcon />
-                </Avatar>
-            </Grid2>
-           
-          </Grid2>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-          {/* Signup Paper */}
-          <Grid2 item>
-            <Paper elevation={10} style={paperStyle}>
-              <Grid2 align='center'>
-                {/*
-                <Avatar style={avatarStyle}>
-                  <LockOutlinedIcon />
-                </Avatar>
-                */}
-                <h3>SIGNUP</h3>
-              </Grid2>
-              <TextField
-                fullWidth
-                label="First name"
-                placeholder="First name"
-                variant="outlined"
-                sx={{
-                  '& .MuiOutlinedInput-root': {
-                    borderRadius: '25px',
-                    height: '45px',
-                  },
-                  mb: 2,
-                }}
-                slotProps={{
-                    input: {
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <PersonOutlineOutlinedIcon/>
-                        </InputAdornment>
-                      ),
-                    },
-                  }}
-              />
-               <TextField
-                fullWidth
-                label="Last name"
-                placeholder="Last name"
-                variant="outlined"
-                sx={{
-                  '& .MuiOutlinedInput-root': {
-                    borderRadius: '25px',
-                    height: '45px',
-                  },
-                  mb: 2,
-                }}
-                slotProps={{
-                    input: {
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <PersonOutlineOutlinedIcon/>
-                        </InputAdornment>
-                      ),
-                    },
-                  }}
-              />
-    
-    <TextField
-                fullWidth
-                label="Email"
-                placeholder="Email"
-                variant="outlined"
-                sx={{
-                  '& .MuiOutlinedInput-root': {
-                    borderRadius: '25px',
-                    height: '45px',
-                  },
-                  mb: 2,
-                }}
-                slotProps={{
-                    input: {
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <EmailOutlinedIcon/>
-                        </InputAdornment>
-                      ),
-                    },
-                  }}
-              />
-    
-              <TextField
-                fullWidth
-                label="Password"
-                placeholder="Password"
-                type="password"
-                variant="outlined"
-                sx={{
-                  '& .MuiOutlinedInput-root': {
-                    borderRadius: '25px',
-                    height: '45px',
-                  },
-                  mb:2,
-                }}
-                slotProps={{
-                    input: {
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <LockIcon />
-                        </InputAdornment>
-                      ),
-                    },
-                  }}
-              />
-               <TextField
-                fullWidth
-                label=" Confirm Password"
-                placeholder="Confirm Password"
-                type="password"
-                variant="outlined"
-                sx={{
-                  '& .MuiOutlinedInput-root': {
-                    borderRadius: '25px',
-                    height: '45px',
-                  },
-                  mb:2,
-                }}
-                slotProps={{
-                    input: {
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <LockIcon />
-                        </InputAdornment>
-                      ),
-                    },
-                  }}
-    
-    
-              />
-               <FormGroup>
-          <FormControlLabel control=
-          {<Checkbox defaultChecked
-            
-            sx={{
-              color: 'black', // Black border for the checkbox
-              '&.Mui-checked': {
-                color: 'black', // Black tick and border when checked
-              },
-            }}
-    
-    
-    
-           />} label="Accept privacy and policy?" />
-    
-    
-    
-    
-          
-        </FormGroup>
-        <br/>
-        <Button variant="contained"
-         sx={{
-        backgroundColor: 'black',
-        color: 'white',
-        marginTop: '8px',
-        width: "100%",
-        borderRadius:'25px',
-        // optional spacing
-        ':hover': {
-          backgroundColor: 'darkgray',
-          
-          // optional hover effect
-        },
-      }}
-    
-    
-        >SIGNUP</Button>
-    
-        
-    
-    
-    
-            </Paper>
-          </Grid2>
-        </Grid2>
-      );
-
-
-
-
-
-
-}
-
-export default Landing;
+      </Grid2>
+);
+  }
+export default Login;

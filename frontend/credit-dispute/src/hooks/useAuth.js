@@ -1,13 +1,10 @@
 import {useEffect} from 'react';
-
 const SigninwithgoogleButton = () =>{
 const clientId=process.env.CLIENT_ID
-
 function handleCallbackResponse(response){
 console.log("Encoded JWT ID"+response.credentials)
 }
-
-    useEffect(() => {
+ useEffect(() => {
         /* global google */
         if(window.google)
          {
@@ -21,8 +18,7 @@ console.log("Encoded JWT ID"+response.credentials)
           );
         }
       }, [clientId]);
-    
-      return (
+     return (
         <div id="signInDiv"></div> // Ensure the div is rendered by the component
       );
     };
