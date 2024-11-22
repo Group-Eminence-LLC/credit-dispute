@@ -25,7 +25,7 @@ def login_view(request):
     if serializer.is_valid():
         user = serializer.validated_data
         tokens = serializer.get_tokens(user)
-        return Response({"message": "Login successful", "tokens": tokens}, status=status.HTTP_200_OK)
+        return Response({"message": "Login successful", "username":'{} {}'.format(user.first_name,user.last_name) ,"tokens": tokens}, status=status.HTTP_200_OK)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @ratelimit(key='ip', rate='5/m', method='POST')
