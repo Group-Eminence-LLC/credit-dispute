@@ -1,9 +1,7 @@
 import {React,useState} from 'react'
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import InputAdornment from '@mui/material/InputAdornment';
 import LockIcon from '@mui/icons-material/Lock';
-import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import Checkbox from '@mui/material/Checkbox';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -22,10 +20,13 @@ const Login= () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(loginUser({ email, password }));
+    setEmail('');
+    setPassword('');
   };
+
  const paperStyle = {
         padding: 20,
-        height: '80vh',
+        height: '90vh',
         width: 320,
         margin: "20px auto", // Adjusted for side-by-side positioning
         borderRadius: "20px",
@@ -38,6 +39,7 @@ return (
           <Grid2 item>
             <Paper elevation={10} style={paperStyle}>
               <Grid2 align='center'>
+                <h1>CreditApp</h1>
             <h3>LOGIN</h3>
             </Grid2>
             <form onSubmit={handleSubmit}>
@@ -47,6 +49,7 @@ return (
                 placeholder="Email"
                 variant="outlined"
                 required
+                
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 sx={{
@@ -102,7 +105,8 @@ return (
             }}
            />} label="Remember me?" />
   </FormGroup>
-        <Button href="#text-buttons"
+        <Button component={Link}
+            to="/forgotpassword"
            sx={{
             textTransform: 'lowercase', // Converts text to lowercase
             fontSize: '0.875rem', // Optional: Adjusts font size
@@ -130,7 +134,7 @@ return (
           },
         mb:2,
       }}
-    > {loading ? 'Logging In...' : 'Login'}</Button>
+    > LOGIN</Button>
     </form>
       <br />
  <Button component={Link}

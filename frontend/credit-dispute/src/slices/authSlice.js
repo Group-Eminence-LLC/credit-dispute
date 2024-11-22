@@ -1,18 +1,15 @@
-// src/features/authSlice.js
+// src/slices/authSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import * as yup from 'yup';
-
 // Environment variables
 const LOGIN_URL = process.env.REACT_APP_LOGIN_ENDPOINT;
 const SIGNUP_URL = process.env.REACT_APP_SIGNUP_ENDPOINT;
-
 // Validation schemas
 const loginSchema = yup.object().shape({
   email: yup.string().email('Invalid email format').required('Email is required'),
   password: yup.string().required('Password is required'),
 });
-
 const signUpSchema = yup.object().shape({
   firstName: yup.string().required('First name is required'),
   lastName: yup.string().required('Last name is required'),
@@ -20,9 +17,9 @@ const signUpSchema = yup.object().shape({
   password: yup.string()
   .min(6, 'Password must be at least 6 characters')
   .matches(
-    /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{6,}$/,
-    'Password must contain at least one letter, one number, and one special character'
-  )
+    /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&#_])[A-Za-z\d@$!%*?&#]{6,}$/,
+    'Password must contain at least one letter, one number, and one special character, including _'
+     )
   .required('Password is required'),
   confirmPassword: yup
     .string()
@@ -42,14 +39,12 @@ export const loginUser = createAsyncThunk(
       console.log('Posting login data to:', LOGIN_URL, 'with data:', loginData);
       const response = await axios.post(LOGIN_URL, loginData);
       console.log('Login response:', response.data);
-
       return response.data;
     } catch (error) {
       return rejectWithValue(error.message || 'Login failed');
     }
   }
 );
-
 // Thunk for signup
 export const signUpUser = createAsyncThunk(
   'auth/signUpUser',
@@ -57,16 +52,23 @@ export const signUpUser = createAsyncThunk(
     try {
 
       // Validate input
-      await signUpSchema.validate(signUpData);
+      await signUpSchema.validate(signUpData,{abortEarly:false});
       const response = await axios.post(SIGNUP_URL, signUpData);
       return response.data;
     } catch (error) {
+      if (error instanceof yup.ValidationError) {
+        console.log('Validation error details:', error.inner);
+    console.log('Failed field(s):', error.inner.map(err => ({
+      field: err.path,
+      message: err.message,
+      value: err.value, // Log the problematic value
+    })));
+      }
       
       return rejectWithValue(error.message || 'Signup failed');
     }
   }
 );
-
 const authSlice = createSlice({
   name: 'auth',
   initialState: {
@@ -109,6 +111,5 @@ const authSlice = createSlice({
       });
   },
 });
-
 export const { resetError } = authSlice.actions;
 export default authSlice.reducer;
